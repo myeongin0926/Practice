@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import ReactDOM from "react-dom";
 
 const AlertArea = styled.div`
   width: 100vw;
@@ -47,25 +48,33 @@ const Alert = (props) => {
     return;
   }
 
-  return (
-    <AlertArea           onClick={() => {
-            props.upDateAlert(null);
-          }}>
-      <div className="message">
-        <div>
-          {props.alert === "null"
-            ? "올바른 값을 입력하세요."
-            : "유효한 나이를 입력하세요."}
+  const ModalOverlay = (props) => {
+    return (
+      <AlertArea>
+        <div className="message">
+          <div>
+            {props.alert === "null"
+              ? "올바른 값을 입력하세요."
+              : "유효한 나이를 입력하세요."}
+          </div>
+          <button
+            onClick={() => {
+              props.upDateAlert(null);
+            }}
+          >
+            OK
+          </button>
         </div>
-        <button
-          onClick={() => {
-            props.upDateAlert(null);
-          }}
-        >
-          OK
-        </button>
-      </div>
-    </AlertArea>
+      </AlertArea>
+    );
+  };
+  return (
+    <>
+      {ReactDOM.createPortal(
+        <ModalOverlay upDateAlert={props.upDateAlert} />,
+        document.getElementById("overlay-root")
+      )}
+    </>
   );
 };
 
